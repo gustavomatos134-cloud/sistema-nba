@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sistema 1Q NBA PRO</title>
+  <title>Sistema 1Q NBA ELITE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body style="font-family: Arial; text-align:center;">
 
-<h2>🏀 SISTEMA 1º QUARTO PRO</h2>
+<h2>🏀 SISTEMA 1Q ELITE 🔥</h2>
 
+<!-- PRÉ-JOGO -->
 <h3>📊 PRÉ-JOGO</h3>
 
 <p>Média Time A:</p>
@@ -20,76 +21,164 @@
 <p>Linha da casa:</p>
 <input id="linha" type="number">
 
-<button onclick="preJogo()">Analisar Pré-Jogo</button>
+<button onclick="preJogo()">Analisar</button>
 
 <h3 id="preResultado"></h3>
 
 <hr>
 
-<h3>🔥 AO VIVO</h3>
+<!-- AO VIVO MANUAL -->
+<h3>🔥 AO VIVO MANUAL</h3>
 
 <p>Tentativas:</p>
-<input id="tentativas" type="number">
+<input id="tentativas">
 
 <p>Convertidas:</p>
-<input id="convertidas" type="number">
+<input id="convertidas">
 
 <p>Tempo (min):</p>
-<input id="tempo" type="number">
+<input id="tempo">
 
-<button onclick="aoVivo()">Analisar Ao Vivo</button>
+<p>3PT Tentadas:</p>
+<input id="t3">
+
+<p>3PT Convertidas:</p>
+<input id="c3">
+
+<p>Últimas bolas (1,0,1,1):</p>
+<input id="ultimas">
+
+<button onclick="aoVivo()">Analisar</button>
 
 <h3 id="liveResultado"></h3>
 
+<hr>
+
+<!-- AUTOMÁTICO -->
+<h3>⚡ MODO AUTOMÁTICO</h3>
+
+<p>Colar dados:</p>
+<input id="dados" placeholder="30,15,6,10,5,1,1,0,1">
+
+<button onclick="auto()">Analisar Automático</button>
+
+<h3 id="resultadoAuto"></h3>
+
 <script>
 
+// PRÉ-JOGO
 function preJogo() {
-  let a = Number(mediaA.value);
-  let b = Number(mediaB.value);
-  let linhaCasa = Number(linha.value);
+  let a = Number(document.getElementById("mediaA").value);
+  let b = Number(document.getElementById("mediaB").value);
+  let linha = Number(document.getElementById("linha").value);
 
-  let mediaTotal = a + b;
-  let valor = mediaTotal - linhaCasa;
+  let total = a + b;
+  let valor = total - linha;
 
-  let decisao = "";
+  let leitura = "";
 
-  if (valor > 5) {
-    decisao = "🔥 OVER FORTE";
-  } else if (valor > 2) {
-    decisao = "📈 OVER LEVE";
-  } else {
-    decisao = "❌ UNDER";
-  }
+  if (valor > 6) leitura = "🔥 OVER MUITO FORTE";
+  else if (valor > 3) leitura = "🔥 OVER";
+  else leitura = "❌ UNDER";
 
   document.getElementById("preResultado").innerHTML =
-    "Média total: " + mediaTotal + "<br>" +
+    "Total: " + total + "<br>" +
     "Valor: " + valor + "<br><br>" +
-    "<b>" + decisao + "</b>";
+    "<b>" + leitura + "</b>";
 }
 
+// AO VIVO MANUAL
 function aoVivo() {
-  let t = Number(tentativas.value);
-  let c = Number(convertidas.value);
-  let tempo = Number(tempo.value);
+
+  let t = Number(document.getElementById("tentativas").value);
+  let c = Number(document.getElementById("convertidas").value);
+  let tempo = Number(document.getElementById("tempo").value);
+
+  let t3 = Number(document.getElementById("t3").value);
+  let c3 = Number(document.getElementById("c3").value);
+
+  let ultimas = document.getElementById("ultimas").value;
 
   let eficiencia = c / t;
   let ritmo = t / tempo;
   let projecao = ritmo * 12;
 
+  let eficiencia3 = c3 / t3;
+
+  let arr = ultimas.split(",");
+  let acertos = arr.filter(x => x == "1").length;
+  let momento = acertos / arr.length;
+
+  let confianca = (ritmo/4 + eficiencia + momento) / 3;
+
+  let alerta = "";
   let decisao = "";
 
-  if (ritmo > 3.5 && eficiencia > 0.5) {
-    decisao = "🔥 ENTRAR FORTE";
-  } else if (ritmo > 3) {
-    decisao = "📈 OBSERVAR";
-  } else {
-    decisao = "❌ NÃO ENTRAR";
+  if (ritmo > 3.5 && eficiencia > 0.5 && momento > 0.6) {
+    alerta = "🚨 ENTRAR AGORA";
+    decisao = "🔥🔥 OVER ABSURDO";
+  } 
+  else if (ritmo > 3.2 && momento > 0.5) {
+    alerta = "⚠️ OPORTUNIDADE";
+    decisao = "🔥 OVER";
+  } 
+  else {
+    alerta = "❌ SEM VALOR";
+    decisao = "UNDER";
   }
 
   document.getElementById("liveResultado").innerHTML =
     "Eficiência: " + eficiencia.toFixed(2) + "<br>" +
     "Ritmo: " + ritmo.toFixed(2) + "<br>" +
-    "Projeção: " + projecao.toFixed(0) + "<br><br>" +
+    "Projeção: " + projecao.toFixed(0) + "<br>" +
+    "3PT: " + eficiencia3.toFixed(2) + "<br>" +
+    "Momento: " + momento.toFixed(2) + "<br>" +
+    "Confiança: " + confianca.toFixed(2) + "<br><br>" +
+    "<b>" + alerta + "</b><br><br>" +
+    "<b>" + decisao + "</b>";
+}
+
+// AUTOMÁTICO
+function auto() {
+
+  let dados = document.getElementById("dados").value.split(",");
+
+  let t = Number(dados[0]);
+  let c = Number(dados[1]);
+  let tempo = Number(dados[2]);
+  let t3 = Number(dados[3]);
+  let c3 = Number(dados[4]);
+
+  let ultimas = dados.slice(5);
+
+  let eficiencia = c / t;
+  let ritmo = t / tempo;
+  let projecao = ritmo * 12;
+
+  let eficiencia3 = c3 / t3;
+
+  let acertos = ultimas.filter(x => x == "1").length;
+  let momento = acertos / ultimas.length;
+
+  let confianca = (ritmo/4 + eficiencia + momento) / 3;
+
+  let decisao = "";
+
+  if (ritmo > 3.5 && eficiencia > 0.5 && momento > 0.6) {
+    decisao = "🔥🔥 ENTRAR AGORA";
+  } else if (ritmo > 3.2) {
+    decisao = "📈 OBSERVAR";
+  } else {
+    decisao = "❌ NÃO ENTRAR";
+  }
+
+  document.getElementById("resultadoAuto").innerHTML =
+    "Eficiência: " + eficiencia.toFixed(2) + "<br>" +
+    "Ritmo: " + ritmo.toFixed(2) + "<br>" +
+    "Projeção: " + projecao.toFixed(0) + "<br>" +
+    "3PT: " + eficiencia3.toFixed(2) + "<br>" +
+    "Momento: " + momento.toFixed(2) + "<br>" +
+    "Confiança: " + confianca.toFixed(2) + "<br><br>" +
     "<b>" + decisao + "</b>";
 }
 
