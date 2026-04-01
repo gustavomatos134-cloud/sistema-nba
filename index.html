@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sistema 1Q NBA</title>
+  <title>Sistema 1Q NBA PRO</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body style="font-family: Arial; text-align:center;">
 
-<h2>🏀 SISTEMA 1º QUARTO</h2>
+<h2>🏀 SISTEMA 1º QUARTO PRO</h2>
+
+<h3>📊 PRÉ-JOGO</h3>
+
+<p>Média Time A:</p>
+<input id="mediaA" type="number">
+
+<p>Média Time B:</p>
+<input id="mediaB" type="number">
+
+<p>Linha da casa:</p>
+<input id="linha" type="number">
+
+<button onclick="preJogo()">Analisar Pré-Jogo</button>
+
+<h3 id="preResultado"></h3>
+
+<hr>
+
+<h3>🔥 AO VIVO</h3>
 
 <p>Tentativas:</p>
 <input id="tentativas" type="number">
@@ -18,13 +37,37 @@
 <p>Tempo (min):</p>
 <input id="tempo" type="number">
 
-<br><br>
-<button onclick="analisar()">Analisar</button>
+<button onclick="aoVivo()">Analisar Ao Vivo</button>
 
-<h3 id="resultado"></h3>
+<h3 id="liveResultado"></h3>
 
 <script>
-function analisar() {
+
+function preJogo() {
+  let a = Number(mediaA.value);
+  let b = Number(mediaB.value);
+  let linhaCasa = Number(linha.value);
+
+  let mediaTotal = a + b;
+  let valor = mediaTotal - linhaCasa;
+
+  let decisao = "";
+
+  if (valor > 5) {
+    decisao = "🔥 OVER FORTE";
+  } else if (valor > 2) {
+    decisao = "📈 OVER LEVE";
+  } else {
+    decisao = "❌ UNDER";
+  }
+
+  document.getElementById("preResultado").innerHTML =
+    "Média total: " + mediaTotal + "<br>" +
+    "Valor: " + valor + "<br><br>" +
+    "<b>" + decisao + "</b>";
+}
+
+function aoVivo() {
   let t = Number(tentativas.value);
   let c = Number(convertidas.value);
   let tempo = Number(tempo.value);
@@ -36,19 +79,20 @@ function analisar() {
   let decisao = "";
 
   if (ritmo > 3.5 && eficiencia > 0.5) {
-    decisao = "🔥 OVER FORTE";
+    decisao = "🔥 ENTRAR FORTE";
   } else if (ritmo > 3) {
-    decisao = "📈 OVER LEVE";
+    decisao = "📈 OBSERVAR";
   } else {
-    decisao = "❌ UNDER";
+    decisao = "❌ NÃO ENTRAR";
   }
 
-  resultado.innerHTML =
+  document.getElementById("liveResultado").innerHTML =
     "Eficiência: " + eficiencia.toFixed(2) + "<br>" +
     "Ritmo: " + ritmo.toFixed(2) + "<br>" +
     "Projeção: " + projecao.toFixed(0) + "<br><br>" +
     "<b>" + decisao + "</b>";
 }
+
 </script>
 
 </body>
