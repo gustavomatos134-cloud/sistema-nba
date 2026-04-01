@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sistema 1Q NBA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body style="font-family: Arial; text-align:center;">
+
+<h2>🏀 SISTEMA 1º QUARTO</h2>
+
+<p>Tentativas:</p>
+<input id="tentativas" type="number">
+
+<p>Convertidas:</p>
+<input id="convertidas" type="number">
+
+<p>Tempo (min):</p>
+<input id="tempo" type="number">
+
+<br><br>
+<button onclick="analisar()">Analisar</button>
+
+<h3 id="resultado"></h3>
+
+<script>
+function analisar() {
+  let t = Number(tentativas.value);
+  let c = Number(convertidas.value);
+  let tempo = Number(tempo.value);
+
+  let eficiencia = c / t;
+  let ritmo = t / tempo;
+  let projecao = ritmo * 12;
+
+  let decisao = "";
+
+  if (ritmo > 3.5 && eficiencia > 0.5) {
+    decisao = "🔥 OVER FORTE";
+  } else if (ritmo > 3) {
+    decisao = "📈 OVER LEVE";
+  } else {
+    decisao = "❌ UNDER";
+  }
+
+  resultado.innerHTML =
+    "Eficiência: " + eficiencia.toFixed(2) + "<br>" +
+    "Ritmo: " + ritmo.toFixed(2) + "<br>" +
+    "Projeção: " + projecao.toFixed(0) + "<br><br>" +
+    "<b>" + decisao + "</b>";
+}
+</script>
+
+</body>
+</html>
